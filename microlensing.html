@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>math.js | plot</title>
+  
+  <script differ src="https://unpkg.com/mathjs@5.4.2/dist/math.min.js"></script>
+
+  <script differ src="https://cdn.plot.ly/plotly-1.35.2.min.js"></script>
+
+  <style>
+    input[type=text] {
+      width: 300px;
+    }
+    input {
+      padding: 6px;
+    }
+    body, html, input {
+      font-family: sans-serif;
+      font-size: 11pt;
+
+    }
+    form {
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+    
+<!-- input display --> 
+<form id="form">
+
+<div align="center">    
+  <label for="eq">d:</label>
+  <div class="slidecontainer", style="display: inline-block">
+  <input type="range" min="0" max="100" value="50" class="slider" id="d">
+  <span id="dLabel" style="font-weight:bold">(50/50)(10**12) m</span>
+</div>
+    
+    <div style="display: inline-block"><span style="color: white">____________</span></div>
+    
+  <label for="eq">v:</label>
+  <div class="slidecontainer", style="display: inline-block">
+  <input type="range" min="0" max="100" value="50" class="slider" id="v">
+  <span id="vLabel" style="font-weight:bold">(50/50)(10**11) m/s</span>
+</div>
+    
+    <div style="display: inline-block"><span style="color: white">____________</span></div>
+
+  <label for="eq">m:</label>
+  <div class="slidecontainer", style="display: inline-block">
+  <input type="range" min="0" max="100" value="50" class="slider" id="m">
+  <span id="mLabel" style="font-weight:bold">(50/50)(3*10**30) kg</span>
+</div>
+</div>
+    
+    <br>
+    
+<div align="center">  
+    
+  <label for="eq">D_l:</label>
+  <div class="slidecontainer", style="display: inline-block">
+  <input type="range" min="0" max="100" value="50" class="slider" id="D_l">
+  <span id="D_lLabel" style="font-weight:bold">(50/50)(1.4*10**20) m</span>
+</div>
+    
+    <div style="display: inline-block"><span style="color: white">____________</span></div>
+
+  <label for="eq">D_s:</label>
+  <div class="slidecontainer", style="display: inline-block">
+  <input type="range" min="0" max="100" value="50" class="slider" id="D_s">
+  <span id="D_sLabel" style="font-weight:bold">(50/50)(3.8*10**20) m</span>
+</div>
+</div>
+</form>
+
+<div align="center">
+    <div id="plot1", style="display: inline-block"></div>
+    <div style="display: inline-block"><span style="color: white">____________</span></div>
+    <div id="plot2", style="display: inline-block"></div>
+</div>
+
+<p>
+  Used plot library: <a href="https://plot.ly/javascript/">Plotly</a>
+</p>
+
+<script differ src="js.js">
+</script>
+
+</body>
+</html>
