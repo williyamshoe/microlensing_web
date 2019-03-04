@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>math.js | plot</title>
+  <title>Microlensing Interactive Graph</title>
   
-  <script differ src="https://unpkg.com/mathjs@5.4.2/dist/math.min.js"></script>
+  <script differ src="math.js"></script>
 
-  <script differ src="https://cdn.plot.ly/plotly-1.35.2.min.js"></script>
+  <script differ src="plotly.js"></script>
 
   <style>
     input[type=text] {
@@ -32,24 +32,24 @@
 <div align="center">    
   <label for="eq">d:</label>
   <div class="slidecontainer", style="display: inline-block">
-  <input type="range" min="0" max="100" value="50" class="slider" id="d">
-  <span id="dLabel" style="font-weight:bold">(50/50)(10**12) m</span>
+  <input type="range" min="0" max="150" value="75" step=".1" class="slider" id="d">
+  <span id="dLabel" style="font-weight:bold">(75/50)(10**7) m</span>
 </div>
     
     <div style="display: inline-block"><span style="color: white">____________</span></div>
     
   <label for="eq">v:</label>
   <div class="slidecontainer", style="display: inline-block">
-  <input type="range" min="0" max="100" value="50" class="slider" id="v">
-  <span id="vLabel" style="font-weight:bold">(50/50)(10**11) m/s</span>
+  <input type="range" min=".1" max="20" step=".1" value="2.5" class="slider" id="v">
+  <span id="vLabel" style="font-weight:bold">(2.5/50)(10**9) m/s</span>
 </div>
     
-    <div style="display: inline-block"><span style="color: white">____________</span></div>
+    <br>
 
   <label for="eq">m:</label>
   <div class="slidecontainer", style="display: inline-block">
-  <input type="range" min="0" max="100" value="50" class="slider" id="m">
-  <span id="mLabel" style="font-weight:bold">(50/50)(3*10**30) kg</span>
+  <input type="range" min="1" max="50" value="25" class="slider" id="m">
+  <span id="mLabel" style="font-weight:bold">(25/50)(3*10**30) kg</span>
 </div>
 </div>
     
@@ -59,7 +59,7 @@
     
   <label for="eq">D_l:</label>
   <div class="slidecontainer", style="display: inline-block">
-  <input type="range" min="0" max="100" value="50" class="slider" id="D_l">
+  <input type="range" min="40" max="100" value="50" class="slider" id="D_l">
   <span id="D_lLabel" style="font-weight:bold">(50/50)(1.4*10**20) m</span>
 </div>
     
@@ -67,9 +67,15 @@
 
   <label for="eq">D_s:</label>
   <div class="slidecontainer", style="display: inline-block">
-  <input type="range" min="0" max="100" value="50" class="slider" id="D_s">
-  <span id="D_sLabel" style="font-weight:bold">(50/50)(3.8*10**20) m</span>
+  <input type="range" min="0.1" max="4.8" value="4" step=".1" class="slider" id="D_s">
+  <span id="D_sLabel" style="font-weight:bold">(4/50)(3.8*10**20) m</span>
 </div>
+</div>
+    
+    <br>
+    
+<div align="center">
+    <button id="anibutton" type="button">Start Animation</button>
 </div>
 </form>
 
@@ -78,7 +84,7 @@
     <div style="display: inline-block"><span style="color: white">____________</span></div>
     <div id="plot2", style="display: inline-block"></div>
 </div>
-
+    
 <p>
   Used plot library: <a href="https://plot.ly/javascript/">Plotly</a>
 </p>

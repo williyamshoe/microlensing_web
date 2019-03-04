@@ -13,8 +13,8 @@ function R_sch(m) {
 function theta_E(R_sch, D_rel) {
     return (2*R_sch/D_rel)**.5
 }
-function beta(theta, theta_E) {
-    return theta-theta_E**2/theta
+function beta(b, D_s) {
+    return Math.tan(b/D_s)
 }
 function u(beta, theta_E) {
     return beta/theta_E
@@ -23,34 +23,50 @@ function magnification(u) {
     return (u**2+2)/(u*(u**2 + 4)**.5)
 }
 
-var d = (document.getElementById('d').value/50)*10**12
-var v = (document.getElementById('v').value/50)*10**11
-var m = (document.getElementById('m').value/50)*3*10**30
-var D_l = (document.getElementById('D_l').value/50)*1.4*10**20
-var D_s = (document.getElementById('D_s').value/50)*3.8*10**20
+var d = (document.getElementById('d').value)*10**7
+var v = (document.getElementById('v').value/50)*10**9
+var m = (document.getElementById('m').value/50)*2*10**29
+var D_l = (document.getElementById('D_l').value/50)*1.234*10**20
+var D_s = (document.getElementById('D_s').value/50)*2.469*10**20
+var xValues = math.range(-50, 50, .5).toArray()
+var yValues = xValues.map(function (x) {
+    return magnification(u(beta(b(x, v, d), D_s), theta_E(R_sch(m), D_rel(D_l, D_s))))
+})
 
+var x1 = 0
+var y1 = 0
 function draw1() {
     try {
         // compile the expression once
         var layout = {
-            autosize: false, width: 500, height: 500,
+            autosize: false, yaxis: {range: [0, 100]},  width: 500, height: 500,
             margin: {l: 50, r: 50, b: 100, t: 100, pad: 4},
         };
 
-        d = (document.getElementById('d').value/50)*10**12
-        v = (document.getElementById('v').value/50)*10**11
-        m = (document.getElementById('m').value/50)*3*10**30
-        D_l = (document.getElementById('D_l').value/50)*1.4*10**20
-        D_s = (document.getElementById('D_s').value/50)*3.8*10**20
+        d = (document.getElementById('d').value)*10**7
+        v = (document.getElementById('v').value/50)*10**9
+        m = (document.getElementById('m').value/2500)*3*10**29
+        D_l = (document.getElementById('D_l').value/2500)*1.*10**19
+        D_s = (document.getElementById('D_s').value/50)*3.8*10**19
 
-        const xValues = math.range(-50, 50, .25).toArray()
-        const yValues = xValues.map(function (x) {
-            return magnification(u(beta(theta(b(x, v, d), m), theta_E(R_sch(m), D_rel(D_l, D_s))), theta_E(R_sch(m), D_rel(D_l, D_s))))
+        xValues = math.range(-50, 50, .5).toArray()
+        yValues = xValues.map(function (x) {
+            return magnification(u(beta(b(x, v, d), D_s), theta_E(R_sch(m), D_rel(D_l, D_s))))
         })
 
         // render the plot using plotly
         const trace1 = {x: xValues, y: yValues, type: 'scatter'}
-        const data = [trace1]
+        var trace2 = {
+            x: [xValues[x1]],
+            y: [yValues[y1]],
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                color: 'rgb(219, 64, 82)',
+                size: 15
+            }
+        };
+        const data = [trace1, trace2]
         Plotly.newPlot('plot1', data, layout)
         draw2()
     }
@@ -63,16 +79,17 @@ function draw1() {
 function draw2() {
     
     try {
-        var r_E = theta_E(R_sch(m), D_rel(D_l, D_s))
+        var r_E = D_l*Math.tan(theta_E(R_sch(m), D_rel(D_l, D_s)))
+        var maxdist = 50*v
         
         var layout = {
             autosize: false, width: 500, height: 500,
             margin: {l: 100, r: 100, b: 100, t: 100, pad: 4},
             xaxis: {
-                range: [-1.2*r_E, 1.2*r_E]
+                range: [-1.2*maxdist, 1.2*maxdist]
             },
             yaxis: {
-                range: [-1.2*r_E, 1.2*r_E]
+                range: [-1.2*maxdist, 1.2*maxdist]
             },
             shapes: [
             {
@@ -89,27 +106,92 @@ function draw2() {
             }, 
             {
                 type: 'line',
-                x0: -1.2*r_E,
+                x0: -1.5*maxdist,
                 y0: d,
-                x1: 1.2*r_E,
+                x1: 1.5*maxdist,
                 y1: d,
                 line: {
-                    color: 'rgb(50, 171, 96)',
+                    color: 'rgb(219, 64, 82)',
                     width: 4,
                     dash: 'dashdot'
                 }
             }]
         };
-
-//        const xValues = math.range(-50, 50, .25).toArray()
-//        const yValues = xValues.map(function (x) {
-//            return magnification(u(beta(theta(b(x, v, d), m), theta_E(R_sch(m), D_rel(D_l, D_s))), theta_E(R_sch(m), D_rel(D_l, D_s))))
-//        })
-
-        // render the plot using plotly
-        const trace1 = {x: 2 * r_E, y: 2 * r_E, type: 'text'}
-        const data = [trace1]
+        var trace2 = {
+            x: [-50*v],
+            y: [d],
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                color: 'rgb(219, 64, 82)',
+                size: 15
+            }
+        };
+        const data = [trace2]
         Plotly.newPlot('plot2', data, layout)
+    }
+    catch (err) {
+        console.error(err)
+        alert(err)
+    }
+}
+
+function animate1() {
+    try {
+        x1 += 1
+        y1 += 1
+        var trace3 = {
+            x: [xValues[x1]],
+            y: [yValues[y1]],
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                color: 'rgb(219, 64, 82)',
+                size: 15
+            }
+        };
+        var trace4 = {
+            x: [-50*v + v*x1/2],
+            y: [d],
+            mode: 'markers',
+            type: 'scatter',
+            marker: {
+                color: 'rgb(219, 64, 82)',
+                size: 15
+            }
+        };
+        Plotly.animate('plot1', {
+            data: [, trace3]
+        }, {
+            transition: {
+              duration: 0
+            },
+            frame: {
+              duration: 0,
+              redraw: false
+            }
+          }
+        )
+        Plotly.animate('plot2', {
+            data: [trace4]
+        }, {
+            transition: {
+              duration: 0
+            },
+            frame: {
+              duration: 0,
+              redraw: false
+            }
+          }
+        )
+        if (x1 < xValues.length-1) {
+            requestAnimationFrame(animate1)
+        }
+        else {
+            x1 = 0;
+            y1 = 0; 
+            draw1();
+        }
     }
     catch (err) {
         console.error(err)
@@ -140,6 +222,10 @@ document.getElementById('D_l').oninput = function() {
 document.getElementById('D_s').oninput = function() {
     document.getElementById('D_sLabel').innerHTML = "("+this.value+"/50)(2.5*10**20) m"
     draw1()
+}
+
+document.getElementById('anibutton').onclick = function() {
+    animate1()
 }
 
 draw1()
